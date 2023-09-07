@@ -41,33 +41,53 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
       searchQuery: "",
+      pokemonList: [],
       selectedPokemon: null,
       loading: false,
     };
   },
   computed: {
     filteredPokemon() {
-      return this.$store.state.pokemonList.filter((pokemon) =>
+      return this.pokemonList.filter((pokemon) =>
         pokemon.name.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
     },
   },
   methods: {
+    async getPokemonList() {
+      try {
+        this.loading = true;
+        const response = await axios.get("https://pokeapi.co/api/v2/pokemon");
+        this.pokemonList = response.data.results;
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.loading = false;
+      }
+    },
+    async showPokemonDetails(pokemon) {
+      try {
+        this.loading = true;
+        const response = await axios.get(pokemon.url);
+        this.selectedPokemon = response.data;
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.loading = false;
+      }
+    },
     searchPokemon() {
       this.selectedPokemon = null;
-      this.$store.commit("SET_SEARCH_QUERY", this.searchQuery);
-    },
-    showPokemonDetails(pokemon) {
-      this.selectedPokemon = null;
-      this.$store.dispatch("fetchPokemonDetails", pokemon.url);
     },
   },
   mounted() {
-    this.$store.dispatch("fetchPokemonList");
+    this.getPokemonList();
   },
 };
 </script>

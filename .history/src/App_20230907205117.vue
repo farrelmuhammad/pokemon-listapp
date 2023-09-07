@@ -58,11 +58,11 @@ export default {
   },
   methods: {
     searchPokemon() {
-      this.selectedPokemon = null;
-      this.$store.commit("SET_SEARCH_QUERY", this.searchQuery);
+      this.selectedPokemon = null; // Hapus detail Pokémon saat mencari
+      this.$store.commit("SET_SEARCH_QUERY", this.searchQuery); // Set state pencarian
     },
     showPokemonDetails(pokemon) {
-      this.selectedPokemon = null;
+      this.selectedPokemon = null; // Hapus detail Pokémon saat menampilkan detail lainnya
       this.$store.dispatch("fetchPokemonDetails", pokemon.url);
     },
   },
