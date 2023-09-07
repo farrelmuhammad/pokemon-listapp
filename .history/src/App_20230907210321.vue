@@ -21,30 +21,14 @@
         </v-col>
       </v-row>
 
-      <v-dialog v-model="showDialog" max-width="500" :overlay="loadingDetails">
+      <v-dialog v-model="showDialog" max-width="500">
         <v-card>
           <v-card-title>
             <h2>{{ selectedPokemon.name }}</h2>
           </v-card-title>
           <v-card-text>
-            <v-progress-circular
-              v-if="loadingDetails"
-              indeterminate
-              color="primary"
-            ></v-progress-circular>
-            <v-row v-else justify="center" align="center">
-              <v-col cols="12" class="text-center">
-                <img
-                  :src="selectedPokemonImage"
-                  alt="Pokemon Image"
-                  style="width: 200px; height: 200px"
-                />
-              </v-col>
-              <v-col cols="12" class="text-center">
-                <p>Height: {{ selectedPokemon.height }}</p>
-                <p>Weight: {{ selectedPokemon.weight }}</p>
-              </v-col>
-            </v-row>
+            <p>Height: {{ selectedPokemon.height }}</p>
+            <p>Weight: {{ selectedPokemon.weight }}</p>
           </v-card-text>
           <v-card-actions>
             <v-btn color="primary" @click="closeDialog">Tutup</v-btn>
@@ -67,10 +51,8 @@ export default {
     return {
       searchQuery: "",
       selectedPokemon: null,
-      selectedPokemonImage: "",
       loading: false,
       showDialog: false,
-      loadingDetails: false,
     };
   },
   computed: {
@@ -91,20 +73,15 @@ export default {
         this.$store.state.selectedPokemon.url === pokemon.url
       ) {
         this.selectedPokemon = this.$store.state.selectedPokemon;
-        this.selectedPokemonImage =
-          this.selectedPokemon.sprites.other.home.front_default;
         this.showDialog = true;
       } else {
-        this.loadingDetails = true;
         this.$store.dispatch("fetchPokemonDetails", pokemon.url).then(() => {
           this.selectedPokemon = this.$store.state.selectedPokemon;
-          this.selectedPokemonImage =
-            this.selectedPokemon.sprites.other.home.front_default;
-          this.loadingDetails = false;
           this.showDialog = true;
         });
       }
     },
+
     closeDialog() {
       this.showDialog = false;
     },

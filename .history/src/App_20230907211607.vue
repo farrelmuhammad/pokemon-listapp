@@ -21,7 +21,7 @@
         </v-col>
       </v-row>
 
-      <v-dialog v-model="showDialog" max-width="500" :overlay="loadingDetails">
+      <v-dialog v-model="showDialog" max-width="500">
         <v-card>
           <v-card-title>
             <h2>{{ selectedPokemon.name }}</h2>
@@ -70,7 +70,7 @@ export default {
       selectedPokemonImage: "",
       loading: false,
       showDialog: false,
-      loadingDetails: false,
+      loadingDetails: false, // Variabel untuk melacak loading saat mengambil detail Pokemon
     };
   },
   computed: {
@@ -95,11 +95,13 @@ export default {
           this.selectedPokemon.sprites.other.home.front_default;
         this.showDialog = true;
       } else {
+        // Mulai loading saat mengambil detail Pokemon
         this.loadingDetails = true;
         this.$store.dispatch("fetchPokemonDetails", pokemon.url).then(() => {
           this.selectedPokemon = this.$store.state.selectedPokemon;
           this.selectedPokemonImage =
             this.selectedPokemon.sprites.other.home.front_default;
+          // Berhenti loading setelah detail Pokemon diambil
           this.loadingDetails = false;
           this.showDialog = true;
         });

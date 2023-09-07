@@ -40,7 +40,7 @@ export default createStore({
             try {
                 commit('SET_LOADING', true);
                 const response = await axios.get(pokemonUrl);
-                // console.log(response.data)
+                console.log(response.data)
                 commit('SET_SELECTED_POKEMON', response.data);
             } catch (error) {
                 console.error(error);
